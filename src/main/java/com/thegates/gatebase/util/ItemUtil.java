@@ -66,7 +66,11 @@ public class ItemUtil {
 
     public static <T> T withMeta(ItemStack itemStack, Function<ItemMeta, T> function) {
         final Optional<ItemMeta> itemMeta = opMeta(itemStack, false);
-        return itemMeta.map(function).orElse(null);
+        if (itemMeta.isEmpty()) return null;
+        ItemMeta meta = itemMeta.get();
+        T t = function.apply(meta);
+        itemStack.setItemMeta(meta);
+        return t;
     }
 
     public static void addLore(ItemMeta itemMeta, List<String> list) {
