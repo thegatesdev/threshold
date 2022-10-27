@@ -1,6 +1,5 @@
 package com.thegates.gatebase.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -22,53 +21,51 @@ import java.util.function.Function;
 public class ItemUtil {
 
 
-    public static <T, Z> void modifyNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType, Z value) {
-        Optional<ItemMeta> meta = opMeta(itemStack, false);
-        if (meta.isEmpty()) return;
-        ItemMeta itemMeta = meta.get();
-        itemMeta.getPersistentDataContainer().set(key, persistentDataType, value);
-        itemStack.setItemMeta(itemMeta);
+    public static <T, Z> boolean modifyNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType, Z value) {
+        final ItemMeta meta = getMeta(itemStack);
+        if (meta == null) return false;
+        meta.getPersistentDataContainer().set(key, persistentDataType, value);
+        itemStack.setItemMeta(meta);
+        return true;
     }
 
-    public static <T, Z> Optional<Z> getNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType) {
-        return getNbt(itemStack, key, persistentDataType, false);
+    public static <T, Z> Z getNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType) {
+        final ItemMeta meta = getMeta(itemStack);
+        if (meta == null) return null;
+        return meta.getPersistentDataContainer().get(key, persistentDataType);
     }
 
-    public static <T, Z> Optional<Z> getNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType, boolean fast) {
-        Optional<ItemMeta> meta = opMeta(itemStack, fast);
-        if (meta.isEmpty()) return Optional.empty();
-        return Optional.ofNullable(meta.get().getPersistentDataContainer().get(key, persistentDataType));
+    public static <T, Z> Optional<Z> opNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType) {
+        return Optional.ofNullable(getNbt(itemStack, key, persistentDataType));
     }
 
     public static <T, Z> boolean hasNbt(ItemStack itemStack, NamespacedKey key, PersistentDataType<T, Z> persistentDataType) {
-        Optional<ItemMeta> meta = opMeta(itemStack, true);
-        if (meta.isEmpty()) return false;
-        return meta.get().getPersistentDataContainer().has(key, persistentDataType);
+        final ItemMeta meta = getMeta(itemStack);
+        if (meta == null) return false;
+        return meta.getPersistentDataContainer().has(key, persistentDataType);
     }
 
 
-    public static Optional<ItemMeta> opMeta(ItemStack itemStack, boolean fast) {
-        if (itemStack == null) return Optional.empty();
-        ItemMeta meta = itemStack.getItemMeta();
-        if (meta == null) {
-            if (fast) return Optional.empty();
-            meta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
-        }
-        return Optional.ofNullable(meta);
+    public static Optional<ItemMeta> opMeta(ItemStack itemStack) {
+        return Optional.ofNullable(getMeta(itemStack));
+    }
+
+    public static ItemMeta getMeta(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        return itemStack.getItemMeta();
     }
 
     public static void withMeta(ItemStack itemStack, Consumer<ItemMeta> consumer) {
-        opMeta(itemStack, false).ifPresent(itemMeta -> {
-            consumer.accept(itemMeta);
-            itemStack.setItemMeta(itemMeta);
-        });
+        final ItemMeta meta = getMeta(itemStack);
+        if (meta != null) {
+            consumer.accept(meta);
+            itemStack.setItemMeta(meta);
+        }
     }
 
     public static <T> T withMeta(ItemStack itemStack, Function<ItemMeta, T> function) {
-        final Optional<ItemMeta> itemMeta = opMeta(itemStack, false);
-        if (itemMeta.isEmpty()) return null;
-        ItemMeta meta = itemMeta.get();
-        T t = function.apply(meta);
+        final ItemMeta meta = getMeta(itemStack);
+        final T t = function.apply(meta);
         itemStack.setItemMeta(meta);
         return t;
     }
@@ -87,7 +84,7 @@ public class ItemUtil {
         itemMeta.setLore(lore);
     }
 
-    
+
     public static AttributeModifier fastModifier(Attribute attribute, double amount, EquipmentSlot equipmentSlot) {
         return new AttributeModifier(UUID.nameUUIDFromBytes((attribute.name() + amount).getBytes()), (attribute.name() + amount), amount, AttributeModifier.Operation.ADD_NUMBER, equipmentSlot);
     }
