@@ -3,7 +3,6 @@ package com.thegates.gatebase;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -30,15 +29,17 @@ public class GateBase extends JavaPlugin {
         }
     }
 
-    public static <T> boolean forEachOR(Collection<T> collection, Predicate<T> predicate) {
-        for (T condition : collection) {
+    public static <T> boolean forEachOR(Iterable<T> iterable, Predicate<T> predicate) {
+        if (iterable == null) return false;
+        for (T condition : iterable) {
             if (predicate.test(condition)) return true;
         }
         return false;
     }
 
-    public static <T> boolean forEachAND(Collection<T> collection, Predicate<T> predicate) {
-        for (T condition : collection) {
+    public static <T> boolean forEachAND(Iterable<T> iterable, Predicate<T> predicate) {
+        if (iterable == null) return true;
+        for (T condition : iterable) {
             if (!predicate.test(condition)) return false;
         }
         return true;
