@@ -11,4 +11,12 @@ public enum LogPrio {
     public int compare(LogPrio other) {
         return Integer.compare(level, other.level);
     }
+
+    public int max() {
+        return TOP.level;
+    }
+
+    public int min() {
+        return BOTTOM.level;
+    }
 }
