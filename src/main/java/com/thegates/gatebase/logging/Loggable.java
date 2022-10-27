@@ -1,4 +1,4 @@
-package com.thegates.gatebase;
+package com.thegates.gatebase.logging;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,19 +47,6 @@ public final class Loggable {
     public record Message(String message, LogPrio prio) {
         public String joined() {
             return prio.name() + ": " + message;
-        }
-    }
-
-    enum LogPrio {
-        BOTTOM(0), LOW(1), NORMAL(2), HIGH(3), TOP(4);
-        public final int level;
-
-        LogPrio(int level) {
-            this.level = level;
-        }
-
-        public int compare(LogPrio other) {
-            return Integer.compare(level, other.level);
         }
     }
 }
