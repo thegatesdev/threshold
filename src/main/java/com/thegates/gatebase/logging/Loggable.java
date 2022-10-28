@@ -1,5 +1,7 @@
 package com.thegates.gatebase.logging;
 
+import com.thegates.gatebase.util.MathUtil;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -9,6 +11,7 @@ public final class Loggable {
     private List<Message> noConsumerLogs;
     private boolean hasListeners;
     private final List<Consumer<Message>> consumers = new LinkedList<>();
+    private int logLevel = LogPrio.NORMAL.level;
 
     public Loggable() {
         noConsumerLogs = new LinkedList<>();
@@ -21,6 +24,10 @@ public final class Loggable {
         hasListeners = true;
     }
 
+    public void setLogLevel(int logLevel) {
+        this.logLevel = MathUtil.clampI(logLevel, LogPrio.min(), LogPrio.max());
+    }
+
     public void listen(Consumer<Message> consumer) {
         consumers.add(consumer);
         if (!hasListeners) {
@@ -31,6 +38,7 @@ public final class Loggable {
     }
 
     public void log(Message message) {
+        if (message.prio.level < logLevel) return;
         if (hasListeners) {
             consumers.forEach(consumer -> consumer.accept(message));
         } else noConsumerLogs.add(message);
