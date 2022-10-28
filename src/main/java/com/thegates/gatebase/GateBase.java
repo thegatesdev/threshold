@@ -19,13 +19,17 @@ public class GateBase extends JavaPlugin {
         return array;
     }
 
-    public static <E extends Enum<E>> Optional<E> enumGet(Class<E> clazz, String name) {
-        if (clazz == null || name == null || name.isBlank()) return Optional.empty();
+    public static <E extends Enum<E>> Optional<E> enumGetOp(Class<E> clazz, String name) {
+        return Optional.ofNullable(enumGet(clazz, name));
+    }
+
+    public static <E extends Enum<E>> E enumGet(Class<E> clazz, String name) {
+        if (clazz == null || name == null || name.isBlank()) return null;
         final String convert = name.strip().replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
         try {
-            return Optional.of(Enum.valueOf(clazz, convert));
+            return Enum.valueOf(clazz, convert);
         } catch (IllegalArgumentException e) {
-            return Optional.empty();
+            return null;
         }
     }
 
