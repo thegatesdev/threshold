@@ -34,7 +34,7 @@ public class GateBase extends JavaPlugin {
     }
 
     public static <T> boolean forEachOR(Iterable<T> iterable, Predicate<T> predicate) {
-        if (iterable == null || predicate == null) return false;
+        if (iterable == null || predicate == null) return true;
         for (T condition : iterable) {
             if (predicate.test(condition)) return true;
         }
@@ -42,7 +42,7 @@ public class GateBase extends JavaPlugin {
     }
 
     public static <T> boolean forEachAND(Iterable<T> iterable, Predicate<T> predicate) {
-        if (iterable == null || predicate == null) return false;
+        if (iterable == null || predicate == null) return true;
         for (T condition : iterable) {
             if (!predicate.test(condition)) return false;
         }
@@ -50,7 +50,7 @@ public class GateBase extends JavaPlugin {
     }
 
     public static <T> boolean forEachORAll(Iterable<T> iterable, Predicate<T> predicate) {
-        if (iterable == null || predicate == null) return false;
+        if (iterable == null || predicate == null) return true;
         boolean ret = false;
         for (T condition : iterable) {
             if (predicate.test(condition) && !ret) ret = true;
@@ -59,7 +59,7 @@ public class GateBase extends JavaPlugin {
     }
 
     public static <T> boolean forEachANDAll(Iterable<T> iterable, Predicate<T> predicate) {
-        if (iterable == null || predicate == null) return false;
+        if (iterable == null || predicate == null) return true;
         boolean ret = true;
         for (T condition : iterable) {
             if (!predicate.test(condition) && ret) ret = false;
