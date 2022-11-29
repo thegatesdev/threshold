@@ -29,7 +29,7 @@
                         </goals>
                         <configuration>
                             <sourceFile>${project.build.directory}/${project.build.finalName}.jar</sourceFile>
-                            <destinationFile>D:\Coding\Minecraft\SERVER\plugins\GateBase.jar
+                            <destinationFile>D:\Coding\Minecraft\SERVER\plugins\GateBase [${project.version}].jar
                             </destinationFile>
                         </configuration>
                     </execution>
