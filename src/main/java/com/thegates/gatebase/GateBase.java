@@ -4,7 +4,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 public class GateBase extends JavaPlugin {
@@ -17,10 +16,6 @@ public class GateBase extends JavaPlugin {
             array[i] = from.clone().add(dir.clone().multiply(i * stepSize));
         }
         return array;
-    }
-
-    public static <E extends Enum<E>> Optional<E> enumGetOp(Class<E> clazz, String name) {
-        return Optional.ofNullable(enumGet(clazz, name));
     }
 
     public static <E extends Enum<E>> E enumGet(Class<E> clazz, String name) {
