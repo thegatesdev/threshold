@@ -1,5 +1,5 @@
 name: GateBase
-version: 0.1
+version: 0.2
 author: TheGates
 api-version: 1.19
 main: com.thegates.gatebase.GateBase
