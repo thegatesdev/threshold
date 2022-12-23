@@ -1,4 +1,4 @@
-package com.thegates.gatebase.util;
+package io.github.thegatesdev.util;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;

@@ -1,4 +1,4 @@
-package com.thegates.gatebase.util;
+package io.github.thegatesdev.util;
 
 public class MathUtil {
     public static double clampD(double val, double min, double max) {

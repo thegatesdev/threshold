@@ -1,4 +1,4 @@
-package com.thegates.gatebase.util;
+package io.github.thegatesdev.util;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;

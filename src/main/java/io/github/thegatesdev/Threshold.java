@@ -1,12 +1,39 @@
-package com.thegates.gatebase;
+package io.github.thegatesdev;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.function.Predicate;
 
-public class GateBase extends JavaPlugin {
+public class Threshold extends JavaPlugin {
+
+    // MODULES
+
+    private final Map<NamespacedKey, PluginModule> modules = new HashMap<>();
+
+    public <M extends PluginModule> M addModule(M module) {
+        modules.putIfAbsent(module.key(), module);
+        return module;
+    }
+
+    public PluginModule getModule(NamespacedKey key) {
+        return modules.get(key);
+    }
+
+    public boolean hasModule(NamespacedKey key) {
+        return modules.containsKey(key);
+    }
+
+    public <M extends PluginModule> M getModule(NamespacedKey key, Class<M> moduleClass) {
+        final PluginModule module = getModule(key);
+        return moduleClass.isInstance(module) ? moduleClass.cast(module) : null;
+    }
+
+    // UTIL
 
     public static Vector[] fromTo(Vector from, Vector to, double stepSize) {
         final int steps = (int) Math.floor(from.distance(to) / stepSize);

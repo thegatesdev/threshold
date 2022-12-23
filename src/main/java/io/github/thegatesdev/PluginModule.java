@@ -1,5 +1,6 @@
-package com.thegates.gatebase;
+package io.github.thegatesdev;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 
 public interface PluginModule {
@@ -8,4 +9,6 @@ public interface PluginModule {
     void enable(Plugin plugin);
 
     void disable(Plugin plugin);
+
+    NamespacedKey key();
 }
