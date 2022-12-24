@@ -1,7 +1,0 @@
-name: Threshold
-version: 0.2
-author: TheGatesDev
-api-version: 1.19
-main: io.github.thegatesdev.Threshold
-depend:
-  - CommandAPI
