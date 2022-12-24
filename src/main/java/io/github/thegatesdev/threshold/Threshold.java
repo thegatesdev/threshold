@@ -1,4 +1,4 @@
-package io.github.thegatesdev;
+package io.github.thegatesdev.threshold;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;

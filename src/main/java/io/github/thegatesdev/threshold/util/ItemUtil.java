@@ -1,4 +1,4 @@
-package io.github.thegatesdev.util;
+package io.github.thegatesdev.threshold.util;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;

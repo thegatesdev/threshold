@@ -1,4 +1,4 @@
-package io.github.thegatesdev.util;
+package io.github.thegatesdev.threshold.util;
 
 public class MathUtil {
     public static double clampD(double val, double min, double max) {
