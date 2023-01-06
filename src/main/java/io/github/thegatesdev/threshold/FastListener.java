@@ -1,4 +1,4 @@
-package io.github.thegatesdev.threshold.util;
+package io.github.thegatesdev.threshold;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
