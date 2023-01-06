@@ -35,7 +35,7 @@ public class Threshold {
     }
 
     public static <E extends Enum<E>> E enumGet(Class<E> clazz, String name) {
-        if (clazz == null || name == null || name.isBlank()) return null;
+        if (clazz == null || name == null) return null;
         final String convert = name.strip().replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
         try {
             return Enum.valueOf(clazz, convert);
