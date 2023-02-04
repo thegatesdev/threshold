@@ -3,9 +3,9 @@ package io.github.thegatesdev.threshold;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
-public abstract class FastListener implements Listener {
+public interface FastListener extends Listener {
 
-    public void register(Plugin plugin) {
+    default void register(Plugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 }
