@@ -1,4 +1,4 @@
-package io.github.thegatesdev.threshold;
+package io.github.thegatesdev.threshold.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundForgetLevelChunkPacket;
@@ -6,11 +6,10 @@ import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
@@ -21,22 +20,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class WorldModification {
+class SyncWorldModification implements WorldModification {
     private final World world;
     private final ServerLevel serverLevel;
 
     private final List<ModifiedBlock> modifications = new ArrayList<>();
 
-    public WorldModification(World world) {
+    SyncWorldModification(World world) {
         this.world = world;
         this.serverLevel = ((CraftWorld) world).getHandle();
     }
 
-    public void setBlock(int x, int y, int z, Material material) {
-        modifications.add(new ModifiedBlock(x, y, z, ((CraftBlockData) material.createBlockData()).getState()));
+    @Override
+    public void set(final int x, final int y, final int z, final BlockData blockData) {
+        modifications.add(new ModifiedBlock(x, y, z, blockData));
     }
 
-
+    @Override
     public int update() {
         final Set<LevelChunk> modifiedChunks = new HashSet<>(2, 0.4f);
         final var lightEngine = serverLevel.getChunkSource().getLightEngine();
@@ -50,7 +50,7 @@ public class WorldModification {
             final LevelChunk blockChunk = serverLevel.getChunkAt(currentBlockPos);
             modifiedChunks.add(blockChunk);
             // Set block
-            blockChunk.setBlockState(currentBlockPos, modification.state, false);
+            blockChunk.setBlockState(currentBlockPos, ((CraftBlockData) modification.data).getState(), false);
             placedBlocks++;
             // Update lighting
             lightEngine.checkBlock(currentBlockPos);
@@ -82,6 +82,6 @@ public class WorldModification {
     }
 
 
-    private record ModifiedBlock(int posX, int posY, int posZ, BlockState state) {
+    private record ModifiedBlock(int posX, int posY, int posZ, BlockData data) {
     }
 }
