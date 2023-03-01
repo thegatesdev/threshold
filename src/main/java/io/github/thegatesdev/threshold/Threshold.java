@@ -24,6 +24,10 @@ public class Threshold {
         return new AttributeModifier(UUID.nameUUIDFromBytes((attribute.name() + amount).getBytes()), (attribute.name() + amount), amount, AttributeModifier.Operation.ADD_NUMBER, equipmentSlot);
     }
 
+    public static AttributeModifier fastModifier(Attribute attribute, double amount) {
+        return fastModifier(attribute, amount, null);
+    }
+
     public static Vector[] fromTo(Vector from, Vector to, double stepSize) {
         final int steps = (int) Math.floor(from.distance(to) / stepSize);
         final Vector[] array = new Vector[steps];
