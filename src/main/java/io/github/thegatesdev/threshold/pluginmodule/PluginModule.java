@@ -1,7 +1,6 @@
 package io.github.thegatesdev.threshold.pluginmodule;
 
 public abstract class PluginModule<P> {
-
     protected final String id;
     protected final P plugin;
 
@@ -26,7 +25,7 @@ public abstract class PluginModule<P> {
     }
 
     void enable() {
-        if (!isLoaded) throw new RuntimeException("Module is not loaded");
+        assertLoaded();
         if (!isEnabled) {
             onEnable();
             isEnabled = true;
@@ -50,10 +49,18 @@ public abstract class PluginModule<P> {
     }
 
     void unload() throws UnsupportedOperationException {
-        if (!isLoaded) throw new RuntimeException("Module is already unloaded");
+        assertLoaded();
         loadedByOther = false;
         isLoaded = false;
         onUnload();
+    }
+
+    public void assertLoaded() throws RuntimeException {
+        if (!isLoaded) throw new RuntimeException("Module is not loaded");
+    }
+
+    public void assertEnabled() throws RuntimeException {
+        if (!isEnabled) throw new RuntimeException("Module is not enabled");
     }
 
     public boolean isLoaded() {
