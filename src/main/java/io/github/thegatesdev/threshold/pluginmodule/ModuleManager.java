@@ -7,8 +7,13 @@ import java.util.logging.Logger;
 public class ModuleManager<P> {
 
     private final Map<Class<?>, PluginModule<P>> modules = new LinkedHashMap<>();
+    private final Logger logger;
 
     private boolean canCrossLoad = false;
+
+    public ModuleManager(Logger logger) {
+        this.logger = logger;
+    }
 
     @SuppressWarnings("unchecked")
     public <M extends PluginModule<P>> M getModule(Class<M> moduleClass) {
@@ -40,7 +45,7 @@ public class ModuleManager<P> {
         if (module.isLoaded() && module.isEnabled()) module.disable();
     }
 
-    public void disableAll(Logger logger) {
+    public void disableAll() {
         logger.info("Disabling all modules");
         for (final PluginModule<P> module : modules.values()) {
 
@@ -59,7 +64,7 @@ public class ModuleManager<P> {
         }
     }
 
-    public void enableAll(Logger logger) {
+    public void enableAll() {
         logger.info("Enabling all modules");
         for (final PluginModule<P> module : modules.values()) {
 
@@ -72,7 +77,7 @@ public class ModuleManager<P> {
         }
     }
 
-    public void loadAll(Logger logger) {
+    public void loadAll() {
         logger.info("Loading all modules");
         canCrossLoad = true;
         for (final PluginModule<P> module : modules.values()) {
@@ -89,7 +94,7 @@ public class ModuleManager<P> {
         canCrossLoad = false;
     }
 
-    private void unloadAll(Logger logger) {
+    private void unloadAll() {
         logger.info("Unloading all modules");
 
         for (final PluginModule<P> module : modules.values()) {
@@ -104,8 +109,8 @@ public class ModuleManager<P> {
         }
     }
 
-    public void reloadAll(Logger logger) {
-        loadAll(logger);
-        unloadAll(logger);
+    public void reloadAll() {
+        loadAll();
+        unloadAll();
     }
 }
