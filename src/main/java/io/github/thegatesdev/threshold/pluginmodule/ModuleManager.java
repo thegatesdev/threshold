@@ -8,13 +8,15 @@ public class ModuleManager<P> {
 
     private final Map<Class<?>, PluginModule<P>> modules = new LinkedHashMap<>();
 
+    private boolean canCrossLoad = false;
+
     @SuppressWarnings("unchecked")
     public <M extends PluginModule<P>> M getModule(Class<M> moduleClass) {
         final M module = (M) modules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
         if (!module.isLoaded()) {
+            if (!canCrossLoad) throw new RuntimeException("This module is not loaded");
             if (module.isLoading) throw new RuntimeException("This module is still loading");
-            // TODO Only load when boolean crossloading e.g. loadAll
             module.load();
             module.loadedByOther = true;
         }
@@ -72,7 +74,7 @@ public class ModuleManager<P> {
 
     public void loadAll(Logger logger) {
         logger.info("Loading all modules");
-
+        canCrossLoad = true;
         for (final PluginModule<P> module : modules.values()) {
 
             if (module.isLoaded() && !module.loadedByOther) logger.info(module.id + " has already been loaded.");
@@ -84,6 +86,7 @@ public class ModuleManager<P> {
             module.loadedByOther = false;
 
         }
+        canCrossLoad = false;
     }
 
     private void unloadAll(Logger logger) {
