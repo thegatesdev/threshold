@@ -28,8 +28,9 @@ public class ModuleManager<P> {
         return module;
     }
 
-    public <M extends PluginModule<P>> ModuleManager<P> addModule(M module) {
-        modules.putIfAbsent(module.getClass(), module);
+    @SafeVarargs
+    public final ModuleManager<P> addModules(PluginModule<P>... modules) {
+        for (final PluginModule<P> module : modules) this.modules.putIfAbsent(module.getClass(), module);
         return this;
     }
 
