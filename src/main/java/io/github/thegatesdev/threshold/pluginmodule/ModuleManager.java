@@ -110,7 +110,7 @@ public class ModuleManager<P> {
     }
 
     public void reloadAll() {
-        loadAll();
         unloadAll();
+        loadAll();
     }
 }
