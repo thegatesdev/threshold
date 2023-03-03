@@ -81,7 +81,7 @@ public class ModuleManager<P> {
         }
     }
 
-    public void loadAll() {
+    private void loadAll() {
         logger.info("Loading all modules");
         canCrossLoad = true;
         for (final PluginModule<P> module : modules.values()) {
@@ -142,7 +142,10 @@ public class ModuleManager<P> {
     }
 
     public void reloadAll() {
+        logger.info("Reloading modules...");
+        final long before = System.currentTimeMillis();
         unloadAll();
         loadAll();
+        logger.info("Reload complete: %sms".formatted(System.currentTimeMillis() - before));
     }
 }
