@@ -52,6 +52,7 @@ public abstract class PluginModule<P> {
         assertLoaded();
         loadedByOther = false;
         isLoaded = false;
+        disable();
         onUnload();
     }
 
