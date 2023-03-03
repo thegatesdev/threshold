@@ -2,24 +2,17 @@ package io.github.thegatesdev.threshold.pluginmodule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.logging.Logger;
 
 public class ModuleManager<P> {
 
     private final Map<Class<?>, PluginModule<P>> modules = new LinkedHashMap<>();
-    private final P plugin;
     private final Logger logger;
 
     private boolean canCrossLoad = false;
 
-    public ModuleManager(P plugin, Logger logger) {
-        this.plugin = plugin;
+    public ModuleManager(Logger logger) {
         this.logger = logger;
-    }
-
-    public P plugin() {
-        return plugin;
     }
 
     @SuppressWarnings("unchecked")
@@ -38,10 +31,6 @@ public class ModuleManager<P> {
     public <M extends PluginModule<P>> M addModule(M module) {
         modules.putIfAbsent(module.getClass(), module);
         return module;
-    }
-
-    public <M extends PluginModule<P>> M addModule(Function<P, M> moduleConstruct) {
-        return addModule(moduleConstruct.apply(plugin));
     }
 
     public void enable(Class<? extends PluginModule<?>> moduleClass) {
