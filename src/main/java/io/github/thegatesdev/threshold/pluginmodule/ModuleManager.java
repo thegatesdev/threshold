@@ -28,9 +28,9 @@ public class ModuleManager<P> {
         return module;
     }
 
-    public <M extends PluginModule<P>> M addModule(M module) {
+    public <M extends PluginModule<P>> ModuleManager<P> addModule(M module) {
         modules.putIfAbsent(module.getClass(), module);
-        return module;
+        return this;
     }
 
     public void enable(Class<? extends PluginModule<?>> moduleClass) {
