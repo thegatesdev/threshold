@@ -53,7 +53,7 @@ public class ModuleManager<P> {
                 try {
                     module.disable();
                     logger.info(module.id + " has been disabled.");
-                } catch (UnsupportedOperationException e) {
+                } catch (PluginModule.UnsupportedModuleOperationException e) {
                     logger.info(module.id + " cannot be disabled.");
                 } catch (Exception e) {
                     logger.warning(module.id + " failed to disable; " + e.getMessage());
@@ -70,8 +70,12 @@ public class ModuleManager<P> {
 
             if (module.isEnabled()) logger.info(module.id + " is already enabled.");
             else if (module.isLoaded()) {
-                module.enable();
-                logger.info(module.id + " has been enabled.");
+                try {
+                    module.enable();
+                    logger.info(module.id + " has been enabled.");
+                } catch (Exception e) {
+                    logger.warning(module.id + " failed to enable; " + e.getMessage());
+                }
             } else logger.warning(module.id + " is not loaded.");
 
         }
@@ -85,8 +89,12 @@ public class ModuleManager<P> {
             if (module.isLoaded() && !module.loadedByOther) logger.info(module.id + " has already been loaded.");
             else if (module.isLoading) logger.warning(module.id + " is already in loading process.");
             else {
-                module.load();
-                logger.info(module.id + " has been loaded");
+                try {
+                    module.load();
+                    logger.info(module.id + " has been loaded");
+                } catch (Exception e) {
+                    logger.warning(module.id + " failed to load; " + e.getMessage());
+                }
             }
             module.loadedByOther = false;
 
@@ -99,11 +107,17 @@ public class ModuleManager<P> {
 
         for (final PluginModule<P> module : modules.values()) {
 
-            if (!module.isLoaded()) logger.info(module.id + " has already been unloaded.");
+            if (!module.isLoaded()) logger.info(module.id + " is not loaded.");
             else if (module.isLoading) logger.warning(module.id + " is in loading process.");
             else {
-                module.unload();
-                logger.info(module.id + " has been unloaded");
+                try {
+                    module.unload();
+                    logger.info(module.id + " has been unloaded.");
+                } catch (PluginModule.UnsupportedModuleOperationException e) {
+                    logger.info(module.id + " cannot be unloaded.");
+                } catch (Exception e) {
+                    logger.warning(module.id + " failed to unload; " + e.getMessage());
+                }
             }
 
         }

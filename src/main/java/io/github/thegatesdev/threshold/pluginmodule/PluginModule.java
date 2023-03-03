@@ -16,11 +16,11 @@ public abstract class PluginModule<P> {
 
     protected abstract void onEnable();
 
-    protected void onDisable() throws UnsupportedOperationException {
+    protected void onDisable() throws UnsupportedModuleOperationException {
         throw new UnsupportedOperationException("Module %s cannot be disabled".formatted(id));
     }
 
-    protected void onUnload() throws UnsupportedOperationException {
+    protected void onUnload() throws UnsupportedModuleOperationException {
         throw new UnsupportedOperationException("Modules %s cannot be unloaded".formatted(id));
     }
 
@@ -32,7 +32,7 @@ public abstract class PluginModule<P> {
         }
     }
 
-    void disable() throws UnsupportedOperationException {
+    void disable() throws UnsupportedModuleOperationException {
         if (!isLoaded) throw new RuntimeException("Module is not loaded");
         if (isEnabled) {
             onDisable();
@@ -48,7 +48,7 @@ public abstract class PluginModule<P> {
         isLoaded = true;
     }
 
-    void unload() throws UnsupportedOperationException {
+    void unload() throws UnsupportedModuleOperationException {
         assertLoaded();
         loadedByOther = false;
         isLoaded = false;
@@ -74,5 +74,8 @@ public abstract class PluginModule<P> {
 
     public String id() {
         return id;
+    }
+
+    public static class UnsupportedModuleOperationException extends UnsupportedOperationException {
     }
 }
