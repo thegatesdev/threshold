@@ -20,8 +20,13 @@ public class ModuleManager<P> {
         if (!module.isLoaded()) {
             if (!canCrossLoad) throw new RuntimeException("This module is not loaded");
             if (module.isLoading) throw new RuntimeException("This module is still loading");
-            module.load();
             module.loadedByOther = true;
+            try {
+                module.load();
+                logger.info(module.id + " has been loaded indirectly");
+            } catch (Exception e) {
+                logger.warning(module.id + " failed to load (indirectly); " + e.getMessage());
+            }
         }
         return module;
     }
