@@ -48,6 +48,14 @@ public class Threshold {
         }
     }
 
+    public static <E extends Enum<E>> String[] enumNames(Class<E> enumClass) {
+        final E[] constants = enumClass.getEnumConstants();
+        final int len = constants.length;
+        final String[] out = new String[len];
+        for (int i = 0; i < len; i++) out[i] = constants[i].name();
+        return out;
+    }
+
     public static <T> boolean forEachOR(Iterable<T> iterable, Predicate<T> predicate) {
         for (T condition : iterable) {
             if (predicate.test(condition)) return true;
