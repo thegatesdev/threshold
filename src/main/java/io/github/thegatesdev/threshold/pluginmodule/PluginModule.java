@@ -12,8 +12,6 @@ public abstract class PluginModule<P> {
         this.plugin = plugin;
     }
 
-    protected abstract void onInitialize();
-
     protected abstract void onLoad();
 
     protected abstract void onEnable();
@@ -24,14 +22,6 @@ public abstract class PluginModule<P> {
 
     protected void onUnload() throws UnsupportedModuleOperationException {
         throw new UnsupportedOperationException("Modules %s cannot be unloaded".formatted(id));
-    }
-
-    void initialize() {
-        if (isInitialized) throw new RuntimeException("Module is already initialized");
-        isInitializing = true;
-        onInitialize();
-        isInitialized = true;
-        isInitializing = false;
     }
 
     void enable() {

@@ -103,24 +103,6 @@ public class ModuleManager<P> {
         canCrossLoad = false;
     }
 
-    public void initializeAll() {
-        logger.info("Initializing all modules");
-        canCrossLoad = false;
-        for (final PluginModule<P> module : modules.values()) {
-
-            if (module.isInitialized) logger.info(module.id + " has already been initialized.");
-            else {
-                try {
-                    module.initialize();
-                    logger.info(module.id + " has been initialized");
-                } catch (Exception e) {
-                    logger.warning(module.id + " failed to initialize; " + e.getMessage());
-                }
-            }
-
-        }
-    }
-
     private void unloadAll() {
         logger.info("Unloading all modules");
 
