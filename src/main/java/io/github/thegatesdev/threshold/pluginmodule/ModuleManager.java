@@ -15,16 +15,21 @@ public class ModuleManager<P> {
         this.logger = logger;
     }
 
-    @SuppressWarnings("unchecked")
     public <M extends PluginModule<P>> M getModule(Class<M> moduleClass) {
-        final M module = (M) modules.get(moduleClass);
-        if (module == null) throw new NullPointerException("This module does not exist");
+        M module = getStaticModule(moduleClass);
         if (!module.isLoaded()) {
             if (!canCrossLoad) throw new RuntimeException("This module is not loaded");
             if (module.isLoading) throw new RuntimeException("This module is still loading");
             module.load();
             module.loadedByOther = true;
         }
+        return module;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <M extends PluginModule<P>> M getStaticModule(Class<M> moduleClass) {
+        final M module = (M) modules.get(moduleClass);
+        if (module == null) throw new NullPointerException("This module does not exist");
         return module;
     }
 
