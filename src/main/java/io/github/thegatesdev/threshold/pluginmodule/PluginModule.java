@@ -4,8 +4,8 @@ public abstract class PluginModule<P> {
     protected final String id;
     protected final P plugin;
 
-    protected boolean isInitialized = false, isLoaded = false, isEnabled = false;
-    boolean isLoading = false, isInitializing = false, loadedByOther = false;
+    protected boolean isLoaded = false, isEnabled = false;
+    boolean isLoading = false, loadedByOther = false;
 
     public PluginModule(final String id, P plugin) {
         this.id = id;
@@ -51,9 +51,9 @@ public abstract class PluginModule<P> {
     void unload() {
         assertLoaded();
         loadedByOther = false;
-        isLoaded = false;
-        disable();
+        if (isEnabled) disable();
         onUnload();
+        isLoaded = false;
     }
 
     public void assertLoaded() throws RuntimeException {
