@@ -15,8 +15,8 @@ public class ModuleManager<P> {
         this.logger = logger;
     }
 
-    public <M extends PluginModule<P>> M getModule(Class<M> moduleClass) {
-        M module = getStaticModule(moduleClass);
+    public <M extends PluginModule<P>> M get(Class<M> moduleClass) {
+        M module = getStatic(moduleClass);
         if (!module.isLoaded()) {
             if (!canCrossLoad) throw new RuntimeException("This module is not loaded");
             if (module.isLoading) throw new RuntimeException("This module is still loading");
@@ -32,14 +32,14 @@ public class ModuleManager<P> {
     }
 
     @SuppressWarnings("unchecked")
-    public <M extends PluginModule<P>> M getStaticModule(Class<M> moduleClass) {
+    public <M extends PluginModule<P>> M getStatic(Class<M> moduleClass) {
         final M module = (M) modules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
         return module;
     }
 
     @SafeVarargs
-    public final ModuleManager<P> addModules(PluginModule<P>... modules) {
+    public final ModuleManager<P> add(PluginModule<P>... modules) {
         for (final PluginModule<P> module : modules) this.modules.putIfAbsent(module.getClass(), module);
         return this;
     }
@@ -64,8 +64,6 @@ public class ModuleManager<P> {
                 try {
                     module.disable();
                     logger.info(module.id + " has been disabled.");
-                } catch (PluginModule.UnsupportedModuleOperationException e) {
-                    logger.info(module.id + " cannot be disabled.");
                 } catch (Exception e) {
                     logger.warning(module.id + " failed to disable; " + e.getMessage());
                 }
@@ -124,8 +122,6 @@ public class ModuleManager<P> {
                 try {
                     module.unload();
                     logger.info(module.id + " has been unloaded.");
-                } catch (PluginModule.UnsupportedModuleOperationException e) {
-                    logger.info(module.id + " cannot be unloaded.");
                 } catch (Exception e) {
                     logger.warning(module.id + " failed to unload; " + e.getMessage());
                 }
