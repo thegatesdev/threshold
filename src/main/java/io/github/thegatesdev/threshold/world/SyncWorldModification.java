@@ -63,9 +63,9 @@ class SyncWorldModification implements WorldModification {
             final var unloadPacket = new ClientboundForgetLevelChunkPacket(pos.x, pos.z);
             final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true);
 
+            final int view = Bukkit.getViewDistance();
             for (final Player player : world.getPlayers()) {
                 final ServerPlayer handle = ((CraftPlayer) player).getHandle();
-                final int view = Bukkit.getViewDistance();
                 final ChunkPos playerChunk = handle.chunkPosition();
                 if (pos.x < playerChunk.x - view ||
                         pos.x > playerChunk.x + view ||

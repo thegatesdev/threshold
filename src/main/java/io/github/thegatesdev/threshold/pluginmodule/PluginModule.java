@@ -5,7 +5,7 @@ public abstract class PluginModule<P> {
     protected final P plugin;
 
     protected boolean isLoaded = false, isEnabled = false;
-    boolean isLoading = false, loadedByOther = false;
+    boolean isLoading = false;
 
     public PluginModule(final String id, P plugin) {
         this.id = id;
@@ -50,7 +50,6 @@ public abstract class PluginModule<P> {
 
     void unload() {
         assertLoaded();
-        loadedByOther = false;
         if (isEnabled) disable();
         onUnload();
         isLoaded = false;
