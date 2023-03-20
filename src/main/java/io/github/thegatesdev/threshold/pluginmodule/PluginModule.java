@@ -4,7 +4,7 @@ public abstract class PluginModule<P> {
     protected final String id;
     protected final P plugin;
 
-    protected boolean isLoaded = false, isEnabled = false;
+    protected boolean isLoaded = false, isEnabled = false, hasBeenLoaded = false;
     boolean isLoading = false;
 
     public PluginModule(final String id, P plugin) {
@@ -22,6 +22,9 @@ public abstract class PluginModule<P> {
     }
 
     protected void onUnload() {
+    }
+
+    protected void onFirstLoad() {
     }
 
     void enable() {
@@ -43,6 +46,10 @@ public abstract class PluginModule<P> {
     void load() {
         if (isLoaded) throw new RuntimeException("Module is already loaded");
         isLoading = true;
+        if (!hasBeenLoaded) {
+            onFirstLoad();
+            hasBeenLoaded = true;
+        }
         onLoad();
         isLoading = false;
         isLoaded = true;
