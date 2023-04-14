@@ -12,11 +12,11 @@ import java.util.UUID;
 public class Threshold extends JavaPlugin {
     // UTIL
 
-    public static double clampD(double val, double min, double max) {
+    public static double clamp(double val, double min, double max) {
         return Math.max(min, Math.min(max, val));
     }
 
-    public static int clampI(int val, int min, int max) {
+    public static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(max, val));
     }
 
