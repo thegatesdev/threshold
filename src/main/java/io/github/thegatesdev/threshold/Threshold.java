@@ -8,7 +8,6 @@ import org.bukkit.util.Vector;
 
 import java.util.Locale;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 public class Threshold extends JavaPlugin {
     // UTIL
@@ -55,35 +54,5 @@ public class Threshold extends JavaPlugin {
         final String[] out = new String[len];
         for (int i = 0; i < len; i++) out[i] = constants[i].name();
         return out;
-    }
-
-    public static <T> boolean forEachOR(Iterable<T> iterable, Predicate<T> predicate) {
-        for (T condition : iterable) {
-            if (predicate.test(condition)) return true;
-        }
-        return false;
-    }
-
-    public static <T> boolean forEachAND(Iterable<T> iterable, Predicate<T> predicate) {
-        for (T condition : iterable) {
-            if (!predicate.test(condition)) return false;
-        }
-        return true;
-    }
-
-    public static <T> boolean forEachORAll(Iterable<T> iterable, Predicate<T> predicate) {
-        boolean ret = false;
-        for (T condition : iterable) {
-            if (predicate.test(condition)) ret = true;
-        }
-        return ret;
-    }
-
-    public static <T> boolean forEachANDAll(Iterable<T> iterable, Predicate<T> predicate) {
-        boolean ret = true;
-        for (T condition : iterable) {
-            if (!predicate.test(condition)) ret = false;
-        }
-        return ret;
     }
 }
