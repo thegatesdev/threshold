@@ -2,38 +2,24 @@ package io.github.thegatesdev.threshold;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class PluginEvent<T> {
-    private final List<Consumer<T>> listeners = new ArrayList<>();
-    private final Consumer<Exception> errorHandler;
-
-    public PluginEvent(final Consumer<Exception> errorHandler) {
-        this.errorHandler = errorHandler;
-    }
-
-    public PluginEvent() {
-        this(null);
-    }
+    private final List<Listener<T>> listeners = new ArrayList<>();
 
     public void dispatch(T t) {
-        if (errorHandler == null) for (int i = 0; i < listeners.size(); i++) listeners.get(i).accept(t);
-        else {
-            for (int i = 0; i < listeners.size(); i++) {
-                try {
-                    listeners.get(i).accept(t);
-                } catch (Exception e) {
-                    errorHandler.accept(e);
-                }
-            }
-        }
+        for (int i = 0; i < listeners.size(); i++) listeners.get(i).handle(t);
     }
 
-    public void bind(Consumer<T> consumer) {
-        listeners.add(consumer);
+    public void bind(Listener<T> listener) {
+        listeners.add(listener);
     }
 
-    public void unbind(Consumer<T> consumer) {
-        listeners.remove(consumer);
+    public void unbind(Listener<T> listener) {
+        listeners.remove(listener);
+    }
+
+    @FunctionalInterface
+    public interface Listener<T> {
+        void handle(T data);
     }
 }
