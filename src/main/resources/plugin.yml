@@ -3,3 +3,4 @@ version: '${project.version}'
 author: TheGatesDev
 api-version: 1.19
 main: io.github.thegatesdev.threshold.Threshold
+description: A plugin basis and utility
