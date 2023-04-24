@@ -50,16 +50,30 @@ public class ModuleManager<P> {
     public void enable(Class<? extends PluginModule<?>> moduleClass) {
         final PluginModule<P> module = mappedModules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
-        if (module.isLoaded() && !module.isEnabled()) module.enable();
+        if (module.isLoaded() && !module.isEnabled()) {
+            module.enable();
+            module.manualDisabled = false;
+        }
     }
 
     public void disable(Class<? extends PluginModule<?>> moduleClass) {
         final PluginModule<P> module = mappedModules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
-        if (module.isLoaded() && module.isEnabled()) module.disable();
+        if (module.isLoaded() && module.isEnabled()) {
+            module.disable();
+            module.manualDisabled = true;
+        }
     }
 
-    public synchronized void loadAll(boolean enablePrevious) {
+    public synchronized void disable() {
+        for (PluginModule<P> module : modules) if (module.isLoaded()) module.disable();
+    }
+
+    public synchronized void enable() {
+        for (PluginModule<P> module : modules) if (!module.manualDisabled) module.enable();
+    }
+
+    public synchronized void load() {
         logger.info("Loading all modules...");
         canCrossLoad = true;
         int i = 0;
@@ -70,19 +84,17 @@ public class ModuleManager<P> {
             else {
                 try {
                     module.load();
-                    if (enablePrevious && module.enabledBeforeUnload) module.enable();
                     i++;
                 } catch (Exception e) {
                     logger.warning(module.id + " failed to load; " + e.getMessage());
                 }
             }
-
         }
         canCrossLoad = false;
         logger.info("Loaded %s modules.".formatted(i));
     }
 
-    public synchronized void unloadAll() {
+    public synchronized void unload() {
         logger.info("Unloading all modules...");
         int i = 0;
         for (final PluginModule<P> module : modules) {
