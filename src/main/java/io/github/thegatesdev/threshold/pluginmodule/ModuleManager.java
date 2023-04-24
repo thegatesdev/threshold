@@ -59,40 +59,7 @@ public class ModuleManager<P> {
         if (module.isLoaded() && module.isEnabled()) module.disable();
     }
 
-    public void disableAll() {
-        logger.info("Disabling all modules...");
-        int i = 0;
-        for (final PluginModule<P> module : modules) {
-            if (module.isEnabled()) {
-                try {
-                    module.disable();
-                    i++;
-                } catch (Exception e) {
-                    logger.warning(module.id + " failed to disable; " + e.getMessage());
-                }
-            } else if (!module.isLoaded()) logger.warning(module.id + " is not loaded.");
-        }
-        logger.info("Disabled %s modules.".formatted(i));
-    }
-
-    public void enableAll() {
-        logger.info("Enabling all modules...");
-        int i = 0;
-        for (final PluginModule<P> module : mappedModules.values()) {
-            if (module.isEnabled()) logger.info(module.id + " is already enabled.");
-            else if (module.isLoaded()) {
-                try {
-                    module.enable();
-                    i++;
-                } catch (Exception e) {
-                    logger.warning(module.id + " failed to enable; " + e.getMessage());
-                }
-            } else logger.warning(module.id + " is not loaded.");
-        }
-        logger.info("Enabled %s modules.".formatted(i));
-    }
-
-    private void loadAll(boolean enablePrevious) {
+    public synchronized void loadAll(boolean enablePrevious) {
         logger.info("Loading all modules...");
         canCrossLoad = true;
         int i = 0;
@@ -115,7 +82,7 @@ public class ModuleManager<P> {
         logger.info("Loaded %s modules.".formatted(i));
     }
 
-    private void unloadAll() {
+    public synchronized void unloadAll() {
         logger.info("Unloading all modules...");
         int i = 0;
         for (final PluginModule<P> module : modules) {
@@ -132,13 +99,5 @@ public class ModuleManager<P> {
             }
         }
         logger.info("Unloaded %s modules.".formatted(i));
-    }
-
-    public void reloadAll(boolean enablePrevious) {
-        logger.info("Reloading modules...");
-        final long before = System.currentTimeMillis();
-        unloadAll();
-        loadAll(enablePrevious);
-        logger.info("Reload complete: %sms".formatted(System.currentTimeMillis() - before));
     }
 }
