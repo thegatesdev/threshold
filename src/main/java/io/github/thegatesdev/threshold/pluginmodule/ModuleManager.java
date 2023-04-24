@@ -128,11 +128,12 @@ public class ModuleManager<P> {
         logger.info("Unloaded %s modules.".formatted(i));
     }
 
-    public void reloadAll() {
+    public void reloadAll(boolean enablePrevious) {
         logger.info("Reloading modules...");
         final long before = System.currentTimeMillis();
         unloadAll();
         loadAll();
+        if (enablePrevious) for (PluginModule<P> module : modules.values()) if (module.enabledBeforeUnload) module.enable();
         logger.info("Reload complete: %sms".formatted(System.currentTimeMillis() - before));
     }
 }

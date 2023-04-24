@@ -4,8 +4,12 @@ public abstract class PluginModule<P> {
     protected final String id;
     protected final P plugin;
 
-    protected boolean isLoaded = false, isEnabled = false, hasBeenLoaded = false;
-    boolean isLoading = false;
+    protected boolean
+            isLoaded = false,
+            isEnabled = false,
+            hasBeenLoaded = false;
+    boolean isLoading = false,
+            enabledBeforeUnload = false;
 
     public PluginModule(final String id, P plugin) {
         this.id = id;
@@ -32,6 +36,7 @@ public abstract class PluginModule<P> {
         if (!isEnabled) {
             onEnable();
             isEnabled = true;
+            enabledBeforeUnload = false;
         }
     }
 
@@ -40,6 +45,7 @@ public abstract class PluginModule<P> {
         if (isEnabled) {
             onDisable();
             isEnabled = false;
+            enabledBeforeUnload = false;
         }
     }
 
@@ -53,11 +59,15 @@ public abstract class PluginModule<P> {
         onLoad();
         isLoading = false;
         isLoaded = true;
+        enabledBeforeUnload = false;
     }
 
     void unload() {
         assertLoaded();
-        if (isEnabled) disable();
+        if (isEnabled) {
+            disable();
+            enabledBeforeUnload = true;
+        }
         onUnload();
         isLoaded = false;
     }
