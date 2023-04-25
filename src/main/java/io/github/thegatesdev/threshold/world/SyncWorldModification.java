@@ -10,9 +10,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_19_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R3.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -56,6 +56,8 @@ class SyncWorldModification implements WorldModification {
             lightEngine.checkBlock(currentBlockPos);
         }
 
+        final int view = Bukkit.getViewDistance();
+
         // Reload player chunks
         for (final LevelChunk chunk : modifiedChunks) {
             final ChunkPos pos = chunk.getPos();
@@ -63,7 +65,6 @@ class SyncWorldModification implements WorldModification {
             final var unloadPacket = new ClientboundForgetLevelChunkPacket(pos.x, pos.z);
             final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true);
 
-            final int view = Bukkit.getViewDistance();
             for (final Player player : world.getPlayers()) {
                 final ServerPlayer handle = ((CraftPlayer) player).getHandle();
                 final ChunkPos playerChunk = handle.chunkPosition();
