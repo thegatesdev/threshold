@@ -26,8 +26,9 @@ dependencies {
 }
 
 tasks {
-    processResources {
-        expand("version" to version)
+    register<Copy>("copyJarToLocalServer") {
+        from(jar)
+        into("D:\\Coding\\Minecraft\\SERVER\\plugins")
     }
 
     assemble {
@@ -41,9 +42,11 @@ tasks {
         // See https://openjdk.java.net/jeps/247 for more information.
         options.release.set(17)
     }
+
     javadoc {
         options.encoding = Charsets.UTF_8.name() // We want UTF-8 for everything
     }
+
     processResources {
         filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
         val props = mapOf(
