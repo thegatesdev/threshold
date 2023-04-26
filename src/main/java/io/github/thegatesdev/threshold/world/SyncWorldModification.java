@@ -1,6 +1,7 @@
 package io.github.thegatesdev.threshold.world;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.protocol.game.ClientboundForgetLevelChunkPacket;
 import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +34,7 @@ class SyncWorldModification implements WorldModification {
 
     @Override
     public void set(final int x, final int y, final int z, final BlockData blockData) {
-        modifications.add(new ModifiedBlock(x, y, z, blockData));
+        modifications.add(new ModifiedBlock(x, y, z, SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z), blockData));
     }
 
     @Override
@@ -47,7 +48,7 @@ class SyncWorldModification implements WorldModification {
 
         for (final ModifiedBlock modification : modifications) {
             currentBlockPos.set(modification.posX, modification.posY, modification.posZ);
-            final LevelChunk blockChunk = serverLevel.getChunkAt(currentBlockPos);
+            final LevelChunk blockChunk = serverLevel.getChunk(modification.cPosX, modification.cPosZ);
             modifiedChunks.add(blockChunk);
             // Set block
             blockChunk.setBlockState(currentBlockPos, ((CraftBlockData) modification.data).getState(), false);
@@ -63,7 +64,7 @@ class SyncWorldModification implements WorldModification {
             final ChunkPos pos = chunk.getPos();
 
             final var unloadPacket = new ClientboundForgetLevelChunkPacket(pos.x, pos.z);
-            final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true);
+            final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true, true);
 
             for (final Player player : world.getPlayers()) {
                 final ServerPlayer handle = ((CraftPlayer) player).getHandle();
@@ -83,6 +84,6 @@ class SyncWorldModification implements WorldModification {
     }
 
 
-    private record ModifiedBlock(int posX, int posY, int posZ, BlockData data) {
+    private record ModifiedBlock(int posX, int posY, int posZ, int cPosX, int cPosZ, BlockData data) {
     }
 }

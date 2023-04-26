@@ -1,6 +1,6 @@
-name: Threshold
-version: '${project.version}'
+name: $name
+version: $version
 author: TheGatesDev
-api-version: 1.19
+api-version: $apiVersion
 main: io.github.thegatesdev.threshold.Threshold
-description: A plugin basis and utility
+description: $description
