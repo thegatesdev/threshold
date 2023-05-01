@@ -74,7 +74,6 @@ public class ModuleManager<P> {
     }
 
     public synchronized void load() {
-        logger.info("Loading all modules...");
         canCrossLoad = true;
         int i = 0;
         for (final PluginModule<P> module : modules) {
@@ -95,7 +94,6 @@ public class ModuleManager<P> {
     }
 
     public synchronized void unload() {
-        logger.info("Unloading all modules...");
         int i = 0;
         for (final PluginModule<P> module : modules) {
             if (!module.isLoaded()) continue;
