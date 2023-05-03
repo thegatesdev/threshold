@@ -2,11 +2,14 @@ package io.github.thegatesdev.threshold.pluginmodule;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.logging.Logger;
+
 public abstract class PluginModule<P extends JavaPlugin> {
     protected final String id;
     protected final P plugin;
     protected final ModuleManager<P> moduleManager;
-    
+    protected final Logger logger;
+
     boolean isLoading = false,
             isLoaded = false,
             isEnabled = false,
@@ -16,6 +19,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
     public PluginModule(final String id, ModuleManager<P> moduleManager) {
         this.id = id;
         this.plugin = moduleManager.plugin();
+        this.logger = moduleManager.logger();
         this.moduleManager = moduleManager;
     }
 
