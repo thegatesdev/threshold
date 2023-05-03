@@ -1,22 +1,35 @@
 package io.github.thegatesdev.threshold.pluginmodule;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
-public class ModuleManager<P> {
+public class ModuleManager<P extends JavaPlugin> {
 
     private final Map<Class<?>, PluginModule<P>> mappedModules = new HashMap<>();
     private final List<PluginModule<P>> modules = new ArrayList<>();
 
     private final Logger logger;
+    private final P plugin;
 
     private boolean canCrossLoad = false;
 
-    public ModuleManager(Logger logger) {
-        this.logger = logger;
+    public ModuleManager(P plugin) {
+        this.logger = plugin.getLogger();
+        this.plugin = plugin;
+    }
+
+    public P plugin() {
+        return plugin;
+    }
+
+    public Logger logger() {
+        return logger;
     }
 
     public <M extends PluginModule<P>> M get(Class<M> moduleClass) {
@@ -41,9 +54,11 @@ public class ModuleManager<P> {
     }
 
     @SafeVarargs
-    public final ModuleManager<P> add(PluginModule<P>... modules) {
-        for (final PluginModule<P> module : modules)
-            if (this.mappedModules.putIfAbsent(module.getClass(), module) == null) this.modules.add(module);
+    public final ModuleManager<P> add(Function<ModuleManager<P>, PluginModule<P>>... moduleGenerators) {
+        for (final Function<ModuleManager<P>, PluginModule<P>> moduleGenerator : moduleGenerators) {
+            final var module = moduleGenerator.apply(this);
+            if (this.mappedModules.putIfAbsent(moduleGenerator.getClass(), module) == null) this.modules.add(module);
+        }
         return this;
     }
 

@@ -1,19 +1,22 @@
 package io.github.thegatesdev.threshold.pluginmodule;
 
-public abstract class PluginModule<P> {
+import org.bukkit.plugin.java.JavaPlugin;
+
+public abstract class PluginModule<P extends JavaPlugin> {
     protected final String id;
     protected final P plugin;
-
-    protected boolean
+    protected final ModuleManager<P> moduleManager;
+    
+    boolean isLoading = false,
             isLoaded = false,
             isEnabled = false,
-            hasBeenLoaded = false;
-    boolean isLoading = false,
+            hasBeenLoaded = false,
             manualDisabled = false;
 
-    public PluginModule(final String id, P plugin) {
+    public PluginModule(final String id, ModuleManager<P> moduleManager) {
         this.id = id;
-        this.plugin = plugin;
+        this.plugin = moduleManager.plugin();
+        this.moduleManager = moduleManager;
     }
 
     protected void onLoad() {
