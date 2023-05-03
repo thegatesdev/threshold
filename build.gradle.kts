@@ -17,11 +17,6 @@ dependencies {
 }
 
 tasks {
-    register<Copy>("copyJarToLocalServer") {
-        from(jar)
-        into("D:\\Coding\\Minecraft\\SERVER\\plugins")
-    }
-
     assemble {
         dependsOn(reobfJar)
     }
