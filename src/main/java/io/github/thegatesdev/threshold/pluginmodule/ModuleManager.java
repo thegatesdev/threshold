@@ -57,7 +57,7 @@ public class ModuleManager<P extends JavaPlugin> {
     public final ModuleManager<P> add(Function<ModuleManager<P>, PluginModule<P>>... moduleGenerators) {
         for (final Function<ModuleManager<P>, PluginModule<P>> moduleGenerator : moduleGenerators) {
             final var module = moduleGenerator.apply(this);
-            if (this.mappedModules.putIfAbsent(moduleGenerator.getClass(), module) == null) this.modules.add(module);
+            if (this.mappedModules.putIfAbsent(module.getClass(), module) == null) this.modules.add(module);
         }
         return this;
     }
