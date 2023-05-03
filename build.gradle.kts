@@ -40,8 +40,9 @@ tasks {
         }
     }
 
-    register<Copy>("pluginJar"){
+    register<Copy>("pluginJar") {
         from(jar)
         into(buildDir.resolve("pluginJar"))
+        rename { "${project.name}-plugin.jar" }
     }
 }
