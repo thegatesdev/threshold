@@ -39,4 +39,9 @@ tasks {
             expand(props)
         }
     }
+
+    register<Copy>("pluginJar"){
+        from(jar)
+        into(buildDir.resolve("pluginJar"))
+    }
 }
