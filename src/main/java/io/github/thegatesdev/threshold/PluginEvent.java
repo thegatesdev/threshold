@@ -30,14 +30,13 @@ public class PluginEvent<T> {
 
     public void dispatchAsync(T t, ExecutorService executor) {
         final Future<?>[] futures = new Future[listeners.size()];
-        for (int i = 0; i < listeners.size(); i++) {
-            final int f = i;
-            futures[f] = executor.submit(() -> listeners.get(f).handle(t));
+        for (int i = 0, size = listeners.size(); i < size; i++) {
+            final var listener = listeners.get(i);
+            futures[i] = executor.submit(() -> listener.handle(t));
         }
         for (int i = 0, futuresLength = futures.length; i < futuresLength; i++) {
             try {
                 futures[i].get();
-            } catch (InterruptedException ignored) {
             } catch (Exception e) {
                 if (errorHandler != null) errorHandler.accept(e);
             }
