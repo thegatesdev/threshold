@@ -13,7 +13,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
     boolean isLoading = false,
             isLoaded = false,
             isEnabled = false,
-            hasBeenLoaded = false,
+            isInitialized = false,
             manualDisabled = false;
 
     public PluginModule(final String id, ModuleManager<P> moduleManager) {
@@ -35,7 +35,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
     protected void onUnload() {
     }
 
-    protected void onFirstLoad() {
+    protected void onInitialize() {
     }
 
     void enable() {
@@ -55,15 +55,18 @@ public abstract class PluginModule<P extends JavaPlugin> {
     }
 
     void load() {
+        assertInitialized();
         if (isLoaded) throw new RuntimeException("Module is already loaded");
         isLoading = true;
-        if (!hasBeenLoaded) {
-            onFirstLoad();
-            hasBeenLoaded = true;
-        }
         onLoad();
         isLoading = false;
         isLoaded = true;
+    }
+
+    void initialize() {
+        if (isInitialized) throw new RuntimeException("Module is already initialized");
+        onInitialize();
+        isInitialized = true;
     }
 
     void unload() {
@@ -71,6 +74,10 @@ public abstract class PluginModule<P extends JavaPlugin> {
         if (isEnabled) disable();
         onUnload();
         isLoaded = false;
+    }
+
+    public void assertInitialized() throws RuntimeException {
+        if (!isInitialized) throw new RuntimeException("Module is not initialized");
     }
 
     public void assertLoaded() throws RuntimeException {

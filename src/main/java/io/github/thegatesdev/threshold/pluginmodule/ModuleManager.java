@@ -62,33 +62,42 @@ public class ModuleManager<P extends JavaPlugin> {
         return this;
     }
 
-    public void enable(Class<? extends PluginModule<?>> moduleClass) {
+    public ModuleManager<P> enable(Class<? extends PluginModule<?>> moduleClass) {
         final PluginModule<P> module = mappedModules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
         if (module.isLoaded() && !module.isEnabled()) {
             module.enable();
             module.manualDisabled = false;
         }
+        return this;
     }
 
-    public void disable(Class<? extends PluginModule<?>> moduleClass) {
+    public ModuleManager<P> disable(Class<? extends PluginModule<?>> moduleClass) {
         final PluginModule<P> module = mappedModules.get(moduleClass);
         if (module == null) throw new NullPointerException("This module does not exist");
         if (module.isLoaded() && module.isEnabled()) {
             module.disable();
             module.manualDisabled = true;
         }
+        return this;
     }
 
-    public synchronized void disable() {
+    public synchronized ModuleManager<P> disable() {
         for (PluginModule<P> module : modules) if (module.isLoaded()) module.disable();
+        return this;
     }
 
-    public synchronized void enable() {
+    public synchronized ModuleManager<P> enable() {
         for (PluginModule<P> module : modules) if (!module.manualDisabled) module.enable();
+        return this;
     }
 
-    public synchronized void load() {
+    public synchronized ModuleManager<P> initialize() {
+        for (PluginModule<P> module : modules) if (!module.isInitialized) module.initialize();
+        return this;
+    }
+
+    public synchronized ModuleManager<P> load() {
         canCrossLoad = true;
         int i = 0;
         for (final PluginModule<P> module : modules) {
@@ -106,9 +115,10 @@ public class ModuleManager<P extends JavaPlugin> {
         }
         canCrossLoad = false;
         logger.info("Loaded %s modules.".formatted(i));
+        return this;
     }
 
-    public synchronized void unload() {
+    public synchronized ModuleManager<P> unload() {
         int i = 0;
         for (final PluginModule<P> module : modules) {
             if (!module.isLoaded()) continue;
@@ -124,5 +134,6 @@ public class ModuleManager<P extends JavaPlugin> {
             }
         }
         logger.info("Unloaded %s modules.".formatted(i));
+        return this;
     }
 }
