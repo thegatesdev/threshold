@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.thegatesdev"
-version = "0.2"
+version = "0.3"
 description = "A plugin basis and utility"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
