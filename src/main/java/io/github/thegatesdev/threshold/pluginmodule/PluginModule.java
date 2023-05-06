@@ -15,6 +15,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
             isEnabled = false,
             isInitialized = false,
             manualDisabled = false;
+    private boolean hasBeenLoaded = false;
 
     public PluginModule(final String id, ModuleManager<P> moduleManager) {
         this.id = id;
@@ -24,6 +25,9 @@ public abstract class PluginModule<P extends JavaPlugin> {
     }
 
     protected void onLoad() {
+    }
+
+    protected void onFirstLoad() {
     }
 
     protected void onEnable() {
@@ -56,6 +60,10 @@ public abstract class PluginModule<P extends JavaPlugin> {
         assertInitialized();
         assertNotLoaded();
         isLoading = true;
+        if (!hasBeenLoaded) {
+            onFirstLoad();
+            hasBeenLoaded = true;
+        }
         onLoad();
         isLoading = false;
         isLoaded = true;
