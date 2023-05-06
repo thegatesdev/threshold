@@ -40,23 +40,21 @@ public abstract class PluginModule<P extends JavaPlugin> {
 
     void enable() {
         assertLoaded();
-        if (!isEnabled) {
-            onEnable();
-            isEnabled = true;
-        }
+        assertNotEnabled();
+        onEnable();
+        isEnabled = true;
     }
 
     void disable() {
         assertLoaded();
-        if (isEnabled) {
-            onDisable();
-            isEnabled = false;
-        }
+        assertEnabled();
+        onDisable();
+        isEnabled = false;
     }
 
     void load() {
         assertInitialized();
-        if (isLoaded) throw new RuntimeException("Module is already loaded");
+        assertNotLoaded();
         isLoading = true;
         onLoad();
         isLoading = false;
@@ -64,7 +62,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
     }
 
     void initialize() {
-        if (isInitialized) throw new RuntimeException("Module is already initialized");
+        assertNotInitialized();
         onInitialize();
         isInitialized = true;
     }
@@ -76,16 +74,35 @@ public abstract class PluginModule<P extends JavaPlugin> {
         isLoaded = false;
     }
 
-    public void assertInitialized() throws RuntimeException {
+
+    protected void assertInitialized() throws RuntimeException {
         if (!isInitialized) throw new RuntimeException("Module is not initialized");
     }
 
-    public void assertLoaded() throws RuntimeException {
+    protected void assertLoaded() throws RuntimeException {
         if (!isLoaded) throw new RuntimeException("Module is not loaded");
     }
 
-    public void assertEnabled() throws RuntimeException {
+    protected void assertEnabled() throws RuntimeException {
         if (!isEnabled) throw new RuntimeException("Module is not enabled");
+    }
+
+    protected void assertNotInitialized() throws RuntimeException {
+        if (isInitialized) throw new RuntimeException("Module is already initialized");
+    }
+
+    protected void assertNotLoaded() throws RuntimeException {
+        if (isLoaded) throw new RuntimeException("Module is already loaded");
+        if (isLoading) throw new RuntimeException("Module is loading");
+    }
+
+    protected void assertNotEnabled() throws RuntimeException {
+        if (isEnabled) throw new RuntimeException("Module is already enabled");
+    }
+
+
+    public boolean isLoading() {
+        return isLoading;
     }
 
     public boolean isLoaded() {
@@ -95,6 +112,15 @@ public abstract class PluginModule<P extends JavaPlugin> {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    public boolean manuallyDisabled() {
+        return manualDisabled;
+    }
+
 
     public String id() {
         return id;
