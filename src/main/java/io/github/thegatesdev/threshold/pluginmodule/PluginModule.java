@@ -10,7 +10,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
     protected final ModuleManager<P> moduleManager;
     protected final Logger logger;
 
-    boolean isLoading = false,
+    private boolean isLoading = false,
             isLoaded = false,
             isEnabled = false,
             isInitialized = false,
@@ -42,14 +42,25 @@ public abstract class PluginModule<P extends JavaPlugin> {
     protected void onInitialize() {
     }
 
-    void enable() {
+    public void enable() {
+        massEnable();
+        manualDisabled = false;
+    }
+
+    void massEnable() {
+        if (manualDisabled) return;
         assertLoaded();
         assertNotEnabled();
         onEnable();
         isEnabled = true;
     }
 
-    void disable() {
+    public void disable() {
+        massDisable();
+        manualDisabled = true;
+    }
+
+    void massDisable() {
         assertLoaded();
         assertEnabled();
         onDisable();
