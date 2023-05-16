@@ -43,8 +43,8 @@ public abstract class PluginModule<P extends JavaPlugin> {
     }
 
     public void enable() {
-        massEnable();
         manualDisabled = false;
+        massEnable();
     }
 
     void massEnable() {
