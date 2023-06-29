@@ -80,11 +80,11 @@ public class ModuleManager<P extends JavaPlugin> {
 
     // -- ACTIONS
     public synchronized void disable() {
-        for (PluginModule<P> module : modules) module.massDisable();
+        for (PluginModule<P> module : modules) module.doDisable();
     }
 
     public synchronized void enable() {
-        for (PluginModule<P> module : modules) module.massEnable();
+        for (PluginModule<P> module : modules) module.doEnable();
     }
 
     public synchronized void initialize() {

@@ -44,10 +44,10 @@ public abstract class PluginModule<P extends JavaPlugin> {
 
     public void enable() {
         manualDisabled = false;
-        massEnable();
+        doEnable();
     }
 
-    void massEnable() {
+    void doEnable() {
         if (manualDisabled) return;
         assertLoaded();
         assertNotEnabled();
@@ -56,11 +56,11 @@ public abstract class PluginModule<P extends JavaPlugin> {
     }
 
     public void disable() {
-        massDisable();
+        doDisable();
         manualDisabled = true;
     }
 
-    void massDisable() {
+    void doDisable() {
         assertLoaded();
         assertEnabled();
         onDisable();
@@ -88,7 +88,7 @@ public abstract class PluginModule<P extends JavaPlugin> {
 
     void unload() {
         assertLoaded();
-        if (isEnabled) disable();
+        if (isEnabled) doDisable();
         onUnload();
         isLoaded = false;
     }
