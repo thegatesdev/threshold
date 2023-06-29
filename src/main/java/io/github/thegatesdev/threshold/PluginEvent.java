@@ -2,15 +2,16 @@ package io.github.thegatesdev.threshold;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 public class PluginEvent<T> {
     private final List<Listener<T>> listeners = new ArrayList<>();
-    private final Consumer<Exception> errorHandler;
+    private final Consumer<Throwable> errorHandler;
 
-    public PluginEvent(Consumer<Exception> errorHandler) {
+    public PluginEvent(Consumer<Throwable> errorHandler) {
         this.errorHandler = errorHandler;
     }
 
@@ -37,8 +38,9 @@ public class PluginEvent<T> {
         for (int i = 0, futuresLength = futures.length; i < futuresLength; i++) {
             try {
                 futures[i].get();
-            } catch (Exception e) {
-                if (errorHandler != null) errorHandler.accept(e);
+            } catch (ExecutionException e) {
+                if (errorHandler != null) errorHandler.accept(e.getCause());
+            } catch (Exception ignored) {
             }
         }
     }
