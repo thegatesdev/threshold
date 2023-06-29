@@ -11,9 +11,9 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R3.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ class SyncWorldModification implements WorldModification {
             final ChunkPos pos = chunk.getPos();
 
             final var unloadPacket = new ClientboundForgetLevelChunkPacket(pos.x, pos.z);
-            final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true, true);
+            final var loadPacket = new ClientboundLevelChunkWithLightPacket(chunk, lightEngine, null, null, true);
 
             for (final Player player : world.getPlayers()) {
                 final ServerPlayer handle = ((CraftPlayer) player).getHandle();

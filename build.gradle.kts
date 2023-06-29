@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.thegatesdev"
-version = "0.3"
+version = "1.0.0"
 description = "A plugin basis and utility"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -13,7 +13,7 @@ java {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -32,7 +32,7 @@ tasks {
             "name" to project.name,
             "version" to project.version,
             "description" to project.description,
-            "apiVersion" to "1.19"
+            "apiVersion" to "1.20"
         )
         inputs.properties(props)
         filesMatching("plugin.yml") {
