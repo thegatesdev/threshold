@@ -149,6 +149,10 @@ public class ModuleManager<P extends JavaPlugin> implements Iterable<PluginModul
         return moduleKeysView;
     }
 
+    public int moduleCount() {
+        return modules.size();
+    }
+
     @NotNull
     @Override
     public Iterator<PluginModule<P>> iterator() {
