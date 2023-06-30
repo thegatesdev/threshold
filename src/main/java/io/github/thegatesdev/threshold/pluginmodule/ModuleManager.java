@@ -1,6 +1,7 @@
 package io.github.thegatesdev.threshold.pluginmodule;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -8,7 +9,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
-public class ModuleManager<P extends JavaPlugin> {
+public class ModuleManager<P extends JavaPlugin> implements Iterable<PluginModule<P>> {
 
     private final Map<Class<?>, PluginModule<P>> mappedModules = new HashMap<>();
     private final Map<String, PluginModule<P>> stringMappedModules = new HashMap<>();
@@ -132,7 +133,7 @@ public class ModuleManager<P extends JavaPlugin> {
 
     // -- GET/SET
 
-    public void eachModule(Consumer<PluginModule<P>> moduleConsumer) {
+    public void forEach(Consumer<? super PluginModule<P>> moduleConsumer) {
         mappedModules.values().forEach(moduleConsumer);
     }
 
@@ -146,5 +147,11 @@ public class ModuleManager<P extends JavaPlugin> {
 
     public List<String> moduleKeys() {
         return moduleKeysView;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<PluginModule<P>> iterator() {
+        return mappedModules.values().iterator();
     }
 }
