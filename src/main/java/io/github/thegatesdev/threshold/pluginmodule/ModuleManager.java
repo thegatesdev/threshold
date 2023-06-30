@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
@@ -130,6 +131,10 @@ public class ModuleManager<P extends JavaPlugin> {
     }
 
     // -- GET/SET
+
+    public void eachModule(Consumer<PluginModule<P>> moduleConsumer) {
+        mappedModules.values().forEach(moduleConsumer);
+    }
 
     public P plugin() {
         return plugin;
