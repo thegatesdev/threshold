@@ -82,11 +82,11 @@ public class ModuleManager<P extends JavaPlugin> implements Iterable<PluginModul
 
     // -- ACTIONS
     public synchronized void disable() {
-        for (PluginModule<P> module : modules) module.doDisable();
+        for (PluginModule<P> module : modules) if (module.isEnabled()) module.doDisable();
     }
 
     public synchronized void enable() {
-        for (PluginModule<P> module : modules) module.doEnable();
+        for (PluginModule<P> module : modules) if (module.isLoaded() && !module.isEnabled()) module.doEnable();
     }
 
     public synchronized void initialize() {
