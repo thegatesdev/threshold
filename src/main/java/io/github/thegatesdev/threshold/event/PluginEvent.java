@@ -1,4 +1,4 @@
-package io.github.thegatesdev.threshold;
+package io.github.thegatesdev.threshold.event;
 
 import java.util.ArrayList;
 import java.util.List;
