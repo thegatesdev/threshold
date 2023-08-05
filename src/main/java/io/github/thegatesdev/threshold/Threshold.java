@@ -1,13 +1,9 @@
 package io.github.thegatesdev.threshold;
 
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import java.util.Locale;
-import java.util.UUID;
 
 public class Threshold extends JavaPlugin {
     // UTIL
@@ -18,14 +14,6 @@ public class Threshold extends JavaPlugin {
 
     public static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(max, val));
-    }
-
-    public static AttributeModifier fastModifier(Attribute attribute, double amount, EquipmentSlot equipmentSlot) {
-        return new AttributeModifier(UUID.nameUUIDFromBytes((attribute.name() + amount).getBytes()), (attribute.name() + amount), amount, AttributeModifier.Operation.ADD_NUMBER, equipmentSlot);
-    }
-
-    public static AttributeModifier fastModifier(Attribute attribute, double amount) {
-        return fastModifier(attribute, amount, null);
     }
 
     public static Vector[] fromTo(Vector from, Vector to, double stepSize) {
