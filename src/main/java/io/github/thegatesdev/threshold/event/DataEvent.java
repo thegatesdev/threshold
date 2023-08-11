@@ -7,15 +7,15 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-public class PluginEvent<T> {
+public class DataEvent<T> {
     private final List<Listener<T>> listeners = new ArrayList<>();
     private final Consumer<Throwable> errorHandler;
 
-    public PluginEvent(Consumer<Throwable> errorHandler) {
+    public DataEvent(Consumer<Throwable> errorHandler) {
         this.errorHandler = errorHandler;
     }
 
-    public PluginEvent() {
+    public DataEvent() {
         this(null);
     }
 
