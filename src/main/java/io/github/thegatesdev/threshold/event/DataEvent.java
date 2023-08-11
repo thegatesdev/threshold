@@ -53,6 +53,10 @@ public class DataEvent<T> {
         listeners.remove(listener);
     }
 
+    public boolean isEmpty() {
+        return listeners.isEmpty();
+    }
+
     @FunctionalInterface
     public interface Listener<T> {
         void handle(T data);
