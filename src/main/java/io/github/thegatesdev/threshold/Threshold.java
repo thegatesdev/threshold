@@ -28,7 +28,7 @@ public class Threshold extends JavaPlugin {
 
     public static <E extends Enum<E>> E enumGet(Class<E> clazz, String name) {
         if (clazz == null || name == null) return null;
-        final String convert = name.strip().replaceAll("\\s+", "").toUpperCase(Locale.ROOT);
+        final String convert = name.strip().replaceAll("\\s+", "_").toUpperCase(Locale.ROOT);
         try {
             return Enum.valueOf(clazz, convert);
         } catch (IllegalArgumentException e) {
