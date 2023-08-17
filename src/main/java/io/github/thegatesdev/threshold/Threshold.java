@@ -28,12 +28,15 @@ public class Threshold extends JavaPlugin {
 
     public static <E extends Enum<E>> E enumGet(Class<E> clazz, String name) {
         if (clazz == null || name == null) return null;
-        final String convert = name.strip().replaceAll("\\s+", "_").toUpperCase(Locale.ROOT);
         try {
-            return Enum.valueOf(clazz, convert);
+            return enumGetThrow(clazz, name);
         } catch (IllegalArgumentException e) {
             return null;
         }
+    }
+
+    public static <E extends Enum<E>> E enumGetThrow(Class<E> clazz, String name) throws IllegalArgumentException {
+        return Enum.valueOf(clazz, name.strip().replaceAll("\\s+", "_").toUpperCase(Locale.ROOT));
     }
 
     public static <E extends Enum<E>> String[] enumNames(Class<E> enumClass) {
